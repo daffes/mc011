@@ -24,7 +24,6 @@ LEFT_BRACKET: '{';
 RIGHT_BRACKET: '}';
 COLON: ':';
 UNDERSCORE: '_';
-DOUBLE_QUOTES: '"';
 DOT: '.';
 
 NUMBER: '0'..'9' '0'..'9'*;
@@ -32,12 +31,11 @@ NUMBER: '0'..'9' '0'..'9'*;
 LETTER: ('a'..'z') | ('A'..'Z');
 DIGIT: '0'..'9';
 
-
 WS: [ \t\n]+ -> skip; // skip spaces, tabs, newlines
 NEWLINE: ('\r'? '\n')+;
 SINGLE_COMMENT: '//' ~('\r' | '\n')* NEWLINE { skip(); };
 
-STRING: DOUBLE_QUOTES (~('"') | '\\"')* DOUBLE_QUOTES;
+STRING: '\"' (~('"') | '\\"')* '\"' { setText(getText().substring(1, getText().length()-1)); } ;
 NEWSNAME: LETTER (LETTER | DIGIT | UNDERSCORE)*;
 
 //Parser

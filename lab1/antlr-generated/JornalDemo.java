@@ -2,6 +2,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import java.io.*;
 import java.util.*; 
+import java.lang.*;
 
 public class JornalDemo {
     public String title;
@@ -10,7 +11,7 @@ public class JornalDemo {
     public Integer col;
         
     public class News extends HashMap<String, String> {
-        String order[] = {"abstract", "image", "text", "author", "date" ,"source"};
+        String order[] = {"abstract", "text", "author", "date" ,"source"};
         public Integer coli = 1;
         public Integer colf = 1;
         public String name;
@@ -19,8 +20,15 @@ public class JornalDemo {
             print("<a href=\"\" onclick=\"window.open(&#39;" + name + ".html&#39;,&#39;output&#39;,&#39;width=720,height=500,scrollbars=yes,screenX=400,screenY=200&#39;)\">" + this.get("title")  + "</a><br>");
         }
 
+        public void addImage() {
+            print("<img src=" + this.get("image") + "><br>"); 
+        }
+
         public void publish() {
             makeTitle();
+            if (this.containsKey("image")) {
+                addImage();
+            }
             for (String k : order) {
                 String v = this.get(k);
                 if (v != null) {
