@@ -4,12 +4,12 @@ content {
 		title: "SEMPRE ONLINE. O jornal em tempo real"
 		date: "27 de Outubro de 2009"
 	}
-       	headline1 {
+        aff {
 		title: "1 Virada Cultural Paulista tem programação até as 18h deste domingo"                
 		image: "./virada.jpg"
 
 	        abstract: "A Virada Cultural Paulista, que se iniciou ontem em 20 cidades do Estado, prossegue neste domingo 
-       	 	até as 18h. Ao todo, segundo o governo de São Paulo, são mais de 500 apresentações nas 24 horas de programação.
+       	 	a\"é as 18h. Ao todo, segundo o governo de São Paulo, são mais de 500 apresentações nas 24 horas de programação.
 	        A lista de eventos inclui exibições de peças de teatro, dança, música e cinema. 
 		O governo espera 1 milhão de pessoas nas 24 horas de atividades. Os espetáculos têm entrada 
 		franca e as unidades do Sesc e do Sesi têm programação integrada ao evento.
@@ -17,28 +17,10 @@ content {
 		Franca, Indaiatuba, Jundiaí, Marília, Mogi das Cruzes, Presidente Prudente, Ribeirão Preto, Santos, São Bernardo do Campo, 
 		São José do Rio Preto, São João da Boa Vista, São José dos Campos e Sorocaba são as outras cidades."
                 text: "abobrinha2"
-
+                //test
 		author: "Fulano de Tal"
 		source: "Central de Informações da Virada Cultural"
 	}	
-       	headline2 {
-		title: "2 Virada Cultural Paulista tem programação até as 18h deste domingo"                
-		image: "./virada.jpg"
-
-	        abstract: "A Virada Cultural Paulista, que se iniciou ontem em 20 cidades do Estado, prossegue neste domingo 
-       	 	até as 18h. Ao todo, segundo o governo de São Paulo, são mais de 500 apresentações nas 24 horas de programação.
-	        A lista de eventos inclui exibições de peças de teatro, dança, música e cinema. 
-		O governo espera 1 milhão de pessoas nas 24 horas de atividades. Os espetáculos têm entrada 
-		franca e as unidades do Sesc e do Sesi têm programação integrada ao evento.
-		Santa Bárbara d'Oeste e Mogi Guaçu participam do evento pela primeira vez. Araraquara, Araçatuba, Assis, Bauru, Caraguatatuba, 
-		Franca, Indaiatuba, Jundiaí, Marília, Mogi das Cruzes, Presidente Prudente, Ribeirão Preto, Santos, São Bernardo do Campo, 
-		São José do Rio Preto, São João da Boa Vista, São José dos Campos e Sorocaba são as outras cidades."
-                
-                text: "abobrinha"
-		author: "Fulano de Tal"
-		source: "Central de Informações da Virada Cultural"
-	}	
-                          
 }
 structure {
 

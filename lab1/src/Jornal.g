@@ -1,25 +1,71 @@
-// Define a grammar called Hello
-// match keyword hello followed by an identifier
-// match lower-case identifiers
 grammar Jornal;
- 
-r: 'begin' content structure 'end';
-content: 'content' '{' newspaper news* '}';
-structure: 'structure' '{' .*? '}';
 
-newspaper: 'newspaper' '{' title date? '}';
-news: NEWSNAME '{' title image? abs image? text? author? source? date?'}';
+// Lexer
 
-title: 'title' ':' STRING { System.out.println("Title"); };
-date: 'date' ':' STRING { System.out.println("Date"); };
-source: 'source' ':' STRING;
-author: 'author' ':' STRING;
-text: 'text' ':' STRING;
-image: 'image' ':' STRING;
-abs: 'abstract' ':' STRING;
+BEGIN: 'begin';
+END: 'end';
+CONTENT: 'content';
+NEWSPAPER: 'newspaper';
+TITLE: 'title';
+DATE: 'date';
+SOURCE: 'source';
+AUTHOR: 'author';
+TEXT: 'text';
+IMAGE: 'image';
+ABSTRACT: 'abstract';
+ITEM: 'item';
+STRUCTURE: 'structure';
+FORMAT: 'format';
+COL: 'col';
+BORDER: 'border';
+LEFT_SQBRACKET: '[';
+RIGHT_SQBRACKET: ']';
+LEFT_BRACKET: '{';
+RIGHT_BRACKET: '}';
+COLON: ':';
+UNDERSCORE: '_';
+DOUBLE_QUOTES: '"';
+DOT: '.';
 
-STRING: '"' .*? '"';
-LETTER: [a-zA-Z];
-DIGIT: [0-9];
-NEWSNAME: LETTER (LETTER | DIGIT | '_')*;
+NUMBER: '0'..'9' '0'..'9'*;
+
+LETTER: ('a'..'z') | ('A'..'Z');
+DIGIT: '0'..'9';
+
+
 WS: [ \t\n]+ -> skip; // skip spaces, tabs, newlines
+NEWLINE: ('\r'? '\n')+;
+SINGLE_COMMENT: '//' ~('\r' | '\n')* NEWLINE { skip(); };
+
+STRING: DOUBLE_QUOTES (~('"') | '\\"')* DOUBLE_QUOTES;
+NEWSNAME: LETTER (LETTER | DIGIT | UNDERSCORE)*;
+
+//Parser
+
+r: BEGIN (content structure | structure content) END EOF;
+
+content: CONTENT LEFT_BRACKET news* newspaper news* RIGHT_BRACKET;
+
+newspaper: NEWSPAPER LEFT_BRACKET newspaper_fields* RIGHT_BRACKET;
+
+news: NEWSNAME LEFT_BRACKET news_fields* RIGHT_BRACKET;
+
+newspaper_fields: TITLE COLON STRING #NEWSPAPER_TITLE | DATE COLON STRING #NEWSPAPER_DATE;
+
+news_fields: news_field_value COLON STRING;
+
+news_field_value: (TITLE | ABSTRACT | IMAGE | SOURCE | DATE | AUTHOR | TEXT);
+
+structure: STRUCTURE LEFT_BRACKET item*? format item*? RIGHT_BRACKET;
+
+item: ITEM LEFT_SQBRACKET (NUMBER | pair_number) RIGHT_SQBRACKET LEFT_BRACKET news_piece* RIGHT_BRACKET;
+
+format: FORMAT LEFT_BRACKET ((border column) | (column border)) RIGHT_BRACKET;
+
+border: BORDER COLON NUMBER;
+
+column: COL COLON NUMBER;
+
+pair_number: NUMBER COLON NUMBER;
+
+news_piece: NEWSNAME DOT news_field_value;

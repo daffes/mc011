@@ -41,7 +41,7 @@ content {
 	//           apenas o abstract.
 	//Note que campos onde são inseridos textos estão delimitados por aspas duplas. Para usar aspas duplas dentro desses campos você deve usar \"
 	headline1{
-		title: "Virada Cultural Paulista tem programação até as 18h deste domingo"
+		title:"Virada Cultural Paulista tem programação até as 18h deste domingo"
 
 		image: "./virada.jpg"
 
@@ -111,11 +111,11 @@ O presidente nacional do PSDB, senador Sérgio Guerra (PSDB-PE), afirmou neste d
 
 structure {
 	format{
-		col: 3 //  número de colunas do jornal
-		border: 0 //Largura da borda entre colunas
+		border: 3 //  número de colunas do jornal
+		col: 0 //Largura da borda entre colunas
 	}
 		
-	//define um item que ocupará espaço da coluna 1 até a coluna 4 (4 colunas).
+	//define um item que ocupará espaço da coluna 1 até a coluna 2 (2 colunas).
 	item[1:2]{
 		headline1.title	//Mostra o campo title do objeto headline1 neste item
 		headline1.image //Mostra o campo image do objeto headline1 neste item
@@ -137,7 +137,6 @@ structure {
 		Noticia3.image
 		Noticia3.abstract
 	}
-
 }
 
 end

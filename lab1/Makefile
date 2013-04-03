@@ -1,15 +1,20 @@
-INPUT?=inputs/tuto.npl
+INPUT?=inputs/exemplo.npl
 OUTPUT?=inputs/exemplo.html
 
-compile: antlr-generated/JornalLexer.java
+compile: antlr-generated/JornalLexer.java2
 
-antlr-generated/JornalLexer.java: src/Jornal.g
-	cd src; java -jar /usr/local/lib/antlr-4.0-complete.jar Jornal.g -o ../antlr-generated
-	javac antlr-generated/Jornal*.java
+antlr-generated/JornalLexer.java2:
+	cd src; java -jar /usr/local/lib/antlr-4.0-complete.jar Jornal*.g -o ../antlr-generated
+	javac -cp /usr/local/lib/antlr-4.0-complete.jar antlr-generated/Jornal*.java
 
-run: compile
-	cd antlr-generated; java org.antlr.v4.runtime.misc.TestRig Jornal r ../$(INPUT)
+#run: compile
+#cd antlr-generated; java org.antlr.v4.runtime.misc.TestRig Jornal r ../$(INPUT)
+
+run:
+	cd antlr-generated; java JornalDemo ../$(INPUT)
 
 clean:
+	cp antlr-generated/JornalDemo.java .;
 	rm antlr-generated/*
+	mv JornalDemo.java antlr-generated/
 
