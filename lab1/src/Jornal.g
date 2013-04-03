@@ -35,7 +35,9 @@ WS: [ \t\n]+ -> skip; // skip spaces, tabs, newlines
 NEWLINE: ('\r'? '\n')+;
 SINGLE_COMMENT: '//' ~('\r' | '\n')* NEWLINE { skip(); };
 
-STRING: '\"' (~('"') | '\\"')* '\"' { setText(getText().substring(1, getText().length()-1)); } ;
+STRING: '\"' CHARS* '\"' { setText(getText().substring(1, getText().length()-1).replaceAll("\\\\\"", "\"")); } ;
+CHARS: (~('"') | '\\"');
+
 NEWSNAME: LETTER (LETTER | DIGIT | UNDERSCORE)*;
 
 //Parser
