@@ -1,7 +1,6 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*; 
 
 public class JornalDemo {
@@ -58,6 +57,7 @@ public class JornalDemo {
             if ((n = news.get(newsName)) == null) {
                 news.put(newsName, new News());
                 n = news.get(newsName);
+                n.name = newsName;
             };
             n.put(fieldName, fieldValue);
         }
@@ -90,8 +90,15 @@ public class JornalDemo {
         }
     }
 
+    BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+
     public void print(String s) {
-        System.out.println(s);
+        try {
+            out.write(s + '\n');
+        } catch (Exception e) {
+            // pass
+        }
+                
     }
 
     public void head() {
@@ -106,7 +113,7 @@ public class JornalDemo {
         print(this.title + "<br><br>");
     }
 
-    public void body() {
+    public void body(ArrayList<News> items) {
         print("<body>");
         printTitle();
         for (News i : items) {
@@ -116,10 +123,10 @@ public class JornalDemo {
         print("</body>");
     }
 
-    public void toHtml() {
+    public void toHtml(ArrayList<News> items) {
         print("<html>");
         head();
-        body();
+        body(items);
         print("</html>");
     }
 
@@ -149,7 +156,15 @@ public class JornalDemo {
         for (News i : items) {
             //System.out.println(i);
         }
-        toHtml();
+        toHtml(items);
+        out.close();
+        for (News n : news.values()) {
+            out = new BufferedWriter(new FileWriter("../" + n.name + ".html"));
+            ArrayList<News> t = new ArrayList<News>();
+            t.add(n);
+            toHtml(t);
+            out.close();
+        }
     }
 
     public static void main(String[] args) throws Exception {
