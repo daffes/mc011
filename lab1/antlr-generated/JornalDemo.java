@@ -11,10 +11,15 @@ public class JornalDemo {
     public Integer col;
         
     public class News extends HashMap<String, String> {};
-    
+    // TODO checar items obrigatorios
+
+
     public class Item extends News {
         public Integer coli;
         public Integer colf;
+        public String toString() {
+            return super.toString() + " | " + coli.toString() + ":" + colf.toString();
+        }
     }
 
     public HashMap<String, News> news = new HashMap<String, News>();
@@ -55,8 +60,20 @@ public class JornalDemo {
 
         @Override 
         public void enterItem(JornalParser.ItemContext ctx) { 
-            //i = new Item();
-            //items.add(i);
+            Item i = new Item();
+            if (ctx.NUMBER() != null) {
+                i.coli = Integer.parseInt(ctx.NUMBER().toString());
+                i.colf = i.coli;
+            } else{
+                i.coli = Integer.parseInt(ctx.pair_number().NUMBER(0).toString());
+                i.colf = Integer.parseInt(ctx.pair_number().NUMBER(1).toString());
+            }
+            for (JornalParser.News_pieceContext c : ctx.news_piece()) {
+                String newsName = c.NEWSNAME().toString().toLowerCase();
+                String newsField = c.news_field_value().getText().toString().toLowerCase();
+                i.put(newsField, news.get(newsName).get(newsField));
+            }
+            items.add(i);
         }
     }
 
@@ -73,6 +90,10 @@ public class JornalDemo {
         return stringBuilder.toString();
     }
 
+    public void toHTML() {
+        // TODO
+    }
+
     public void go(String fname) throws Exception {
         String all = readFile(fname);
         CharStream in = new ANTLRInputStream(all);
@@ -83,7 +104,9 @@ public class JornalDemo {
         ParseTree tree = parser.r();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(new JornalWalker(), tree);
-
+        for (Item i : items) {
+            System.out.println(i);
+        }
     }
 
     public static void main(String[] args) throws Exception {
