@@ -10,6 +10,18 @@ public class JornalDemo {
     public String date = null;
     public Integer border = 0;
     public Integer col = 0;
+
+    public class Author {
+        public String name;
+        public String id;
+        public String image;
+        public ArrayList<News> myNews = new ArrayList<News>();
+
+        void publish() {
+            print("<b>Autor:</b> " + name + "<br>");
+            print("<div style=\"float: left; padding: 5px\"><img src=\"" + image + "\" width=\"50\" height=\"50\"> </div>");  
+        }
+    }
         
     public class News extends HashMap<String, String> {
         String order[] = {"date", "abstract", "text"};
@@ -35,7 +47,8 @@ public class JornalDemo {
         }
 
         public void addAuthor() {
-            print("<b>Autor:</b> " + this.get("author") + "<br>"); 
+            Author a = authors.get(this.get("author"));
+            a.publish();
         }
 
         public void addSource() {
@@ -65,19 +78,21 @@ public class JornalDemo {
             if (this.containsKey("similar")) {
                 addSimilar();
             }
-            if (this.containsKey("author")) {
-                addAuthor();
-            }
             if (this.containsKey("source")) {
                 addSource();
             }
+
+            if (this.containsKey("author")) {
+                addAuthor();
+            }
+
 	    print("</div>");
             print("</td>");
         }
     };
-    // TODO checar items obrigatorios
 
     public HashMap<String, News> news = new HashMap<String, News>();
+    public HashMap<String, Author> authors = new HashMap<String, Author>();
     public ArrayList<News> items = new ArrayList<News>();
 
     public void validator() throws Exception {
@@ -146,7 +161,21 @@ public class JornalDemo {
         
         @Override 
         public void enterAuthor(JornalParser.AuthorContext ctx) { 
-            System.err.println(ctx.getText());
+            Author a = new Author();
+            a.id = ctx.NEWSNAME().toString();
+            if (ctx.author_fields(0).author_fields_value().IMAGE() != null) {
+                a.image = ctx.author_fields(0).STRING().toString();
+            }
+            if (ctx.author_fields(1).author_fields_value().IMAGE() != null) {
+                a.image = ctx.author_fields(1).STRING().toString();
+            }
+            if (ctx.author_fields(0).author_fields_value().NAME() != null) {
+                a.name = ctx.author_fields(0).STRING().toString();
+            }
+            if (ctx.author_fields(1).author_fields_value().NAME() != null) {
+                a.name = ctx.author_fields(1).STRING().toString();
+            }
+            authors.put(a.id, a);
         }
     }
 
