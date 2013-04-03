@@ -10,30 +10,40 @@ public class JornalDemo {
     public Integer border;
     public Integer col;
         
-    public class News extends HashMap<String, String> {};
+    public class News extends HashMap<String, String> {
+        String order[] = {"abstract", "image", "text", "author", "date" ,"source"};
+        public Integer coli = 1;
+        public Integer colf = 1;
+        public String name;
+
+        public void makeTitle() {
+            print("<a href=\"\" onclick=\"window.open(&#39;" + name + ".html&#39;,&#39;output&#39;,&#39;width=720,height=500,scrollbars=yes,screenX=400,screenY=200&#39;)\">" + this.get("title")  + "</a><br>");
+        }
+
+        public void publish() {
+            makeTitle();
+            for (String k : order) {
+                String v = this.get(k);
+                if (v != null) {
+                    print(v + "<br>");
+                }
+            }
+        }
+    };
     // TODO checar items obrigatorios
 
-
-    public class Item extends News {
-        public Integer coli;
-        public Integer colf;
-        public String toString() {
-            return super.toString() + " | " + coli.toString() + ":" + colf.toString();
-        }
-    }
-
     public HashMap<String, News> news = new HashMap<String, News>();
-    public ArrayList<Item> items = new ArrayList<Item>();
+    public ArrayList<News> items = new ArrayList<News>();
 
     public class JornalWalker extends JornalBaseListener {
         @Override 
         public void enterNEWSPAPER_DATE(JornalParser.NEWSPAPER_DATEContext ctx) { 
-            title = ctx.STRING().toString();
+            date = ctx.STRING().toString();
         }
 
         @Override 
         public void enterNEWSPAPER_TITLE(JornalParser.NEWSPAPER_TITLEContext ctx) { 
-            date = ctx.STRING().toString();
+            title = ctx.STRING().toString();
         }
 
 	@Override 
@@ -60,21 +70,57 @@ public class JornalDemo {
 
         @Override 
         public void enterItem(JornalParser.ItemContext ctx) { 
-            Item i = new Item();
+            News i = new News();
             if (ctx.NUMBER() != null) {
                 i.coli = Integer.parseInt(ctx.NUMBER().toString());
                 i.colf = i.coli;
-            } else{
+            } else {
                 i.coli = Integer.parseInt(ctx.pair_number().NUMBER(0).toString());
                 i.colf = Integer.parseInt(ctx.pair_number().NUMBER(1).toString());
             }
             for (JornalParser.News_pieceContext c : ctx.news_piece()) {
                 String newsName = c.NEWSNAME().toString().toLowerCase();
                 String newsField = c.news_field_value().getText().toString().toLowerCase();
+                if (newsField.equals("title")) {
+                    i.name = newsName;
+                }
                 i.put(newsField, news.get(newsName).get(newsField));
             }
             items.add(i);
         }
+    }
+
+    public void print(String s) {
+        System.out.println(s);
+    }
+
+    public void head() {
+        print("<head>");
+        print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">" +
+              "<title>" + this.title + "</title>" +
+              "<script type=\"text/javascript\"></script>");
+        print("</head>");
+    }
+
+    public void printTitle() {
+        print(this.title + "<br><br>");
+    }
+
+    public void body() {
+        print("<body>");
+        printTitle();
+        for (News i : items) {
+            i.publish();
+            print("<br>");
+        }
+        print("</body>");
+    }
+
+    public void toHtml() {
+        print("<html>");
+        head();
+        body();
+        print("</html>");
     }
 
     public String readFile(String fname) throws Exception {
@@ -90,10 +136,6 @@ public class JornalDemo {
         return stringBuilder.toString();
     }
 
-    public void toHTML() {
-        // TODO
-    }
-
     public void go(String fname) throws Exception {
         String all = readFile(fname);
         CharStream in = new ANTLRInputStream(all);
@@ -104,9 +146,10 @@ public class JornalDemo {
         ParseTree tree = parser.r();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(new JornalWalker(), tree);
-        for (Item i : items) {
-            System.out.println(i);
+        for (News i : items) {
+            //System.out.println(i);
         }
+        toHtml();
     }
 
     public static void main(String[] args) throws Exception {

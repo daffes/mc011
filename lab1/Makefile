@@ -11,7 +11,7 @@ antlr-generated/JornalLexer.java2:
 #cd antlr-generated; java org.antlr.v4.runtime.misc.TestRig Jornal r ../$(INPUT)
 
 run:
-	cd antlr-generated; java JornalDemo ../$(INPUT)
+	cd antlr-generated; java JornalDemo ../$(INPUT) > ../output.html
 
 clean:
 	cp antlr-generated/JornalDemo.java .;
