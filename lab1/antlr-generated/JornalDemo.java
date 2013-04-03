@@ -12,7 +12,7 @@ public class JornalDemo {
     public Integer col = 0;
         
     public class News extends HashMap<String, String> {
-        String order[] = {"abstract", "text", "date"};
+        String order[] = {"date", "abstract", "text"};
         public Integer coli = 1;
         public Integer colf = 1;
         public String name;
@@ -24,9 +24,6 @@ public class JornalDemo {
             if (!this.containsKey("abstract")) {
                 throw new Exception("A noticia " + name + " nao tem abstract");
             }
-            
-            assert this.containsKey("title");
-            assert this.containsKey("abstract");
         }
 
         public void makeTitle() {
@@ -45,6 +42,13 @@ public class JornalDemo {
             print("<b>Fonte:</b> " + this.get("source") + "<br>"); 
         }
 
+        public void addSimilar() {
+            String newsName = this.get("similar");
+            News n = news.get(newsName);
+            String title = n.get("title");
+            print("<b>Continue lendo sobre esse assunto em:</b> <a href=\"" + newsName + ".html\">" + title +  "</a><br><br>"); 
+        }
+
         public void publish() {
             print("<td width=\""+ (new Integer(1012/col)).toString() + "\" valign=\"top\" colspan=\"" + (new Integer(colf - coli + 1)).toString() + "\">");
 	    print("<div id=\"article\">");
@@ -57,6 +61,9 @@ public class JornalDemo {
                 if (v != null) {
                     print(v + "<br><br>");
                 }
+            }
+            if (this.containsKey("similar")) {
+                addSimilar();
             }
             if (this.containsKey("author")) {
                 addAuthor();
@@ -136,6 +143,11 @@ public class JornalDemo {
                 i.put(newsField, news.get(newsName).get(newsField));
             }
             items.add(i);
+        }
+        
+        @Override 
+        public void enterAuthor(JornalParser.AuthorContext ctx) { 
+            System.err.println(ctx.getText());
         }
     }
 

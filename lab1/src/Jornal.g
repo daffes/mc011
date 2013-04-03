@@ -10,6 +10,9 @@ TITLE: 'title';
 DATE: 'date';
 SOURCE: 'source';
 AUTHOR: 'author';
+AUTHORS: 'authors';
+NAME: 'name';
+SIMILAR: 'similar';
 TEXT: 'text';
 IMAGE: 'image';
 ABSTRACT: 'abstract';
@@ -42,7 +45,7 @@ NEWSNAME: LETTER (LETTER | DIGIT | UNDERSCORE)*;
 
 //Parser
 
-r: BEGIN (content structure | structure content) END EOF;
+r: BEGIN (content structure | structure content) authors? END EOF;
 
 content: CONTENT LEFT_BRACKET news* newspaper news* RIGHT_BRACKET;
 
@@ -54,7 +57,7 @@ newspaper_fields: TITLE COLON STRING #NEWSPAPER_TITLE | DATE COLON STRING #NEWSP
 
 news_fields: news_field_value COLON STRING;
 
-news_field_value: (TITLE | ABSTRACT | IMAGE | SOURCE | DATE | AUTHOR | TEXT);
+news_field_value: (TITLE | ABSTRACT | IMAGE | SOURCE | DATE | AUTHOR | TEXT | SIMILAR);
 
 structure: STRUCTURE LEFT_BRACKET item*? format item*? RIGHT_BRACKET;
 
@@ -69,3 +72,11 @@ column: COL COLON NUMBER;
 pair_number: NUMBER COLON NUMBER;
 
 news_piece: NEWSNAME DOT news_field_value;
+
+authors: AUTHORS LEFT_BRACKET author* RIGHT_BRACKET;
+
+author: NEWSNAME LEFT_BRACKET author_fields* RIGHT_BRACKET;
+
+author_fields: author_fields_value COLON STRING;
+
+author_fields_value: (NAME | IMAGE);
