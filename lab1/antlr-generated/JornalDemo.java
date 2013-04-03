@@ -30,7 +30,7 @@ public class JornalDemo {
         }
 
         public void makeTitle() {
-            print("<a href=\"\" onclick=\"window.open(&#39;" + name + ".html&#39;,&#39;output&#39;,&#39;width=1048,height=500,scrollbars=yes,screenX=400,screenY=200&#39;)\">" + this.get("title")  + "</a><br>");
+            print("<div id=\"title\"><a href=\"\" onclick=\"window.open(&#39;" + name + ".html&#39;,&#39;output&#39;,&#39;width=1048,height=500,scrollbars=yes,screenX=400,screenY=200&#39;)\">" + this.get("title")  + "</a></div>");
         }
 
         public void addImage() {
@@ -152,12 +152,14 @@ public class JornalDemo {
         print("<head>");
         print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">" +
               "<title>" + this.title + "</title>" +
+              "<link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\" media=\"screen\" />" +
               "<script type=\"text/javascript\"></script>");
         print("</head>");
     }
 
     public void printTitle() {
-        print("<center><font size=\"6\">" + this.title + "\"</font></center>" + "<br><br>");
+        print("<div id=\"journalTitle\">" + this.title + "</div>");
+        print("<div id=\"journalDate\">" + this.date + "</div>");
     }
 
     public void body(ArrayList<News> items) {
@@ -186,7 +188,7 @@ public class JornalDemo {
                 print("<td width=\"337\" align=\"justify\" valign=\"top\" colspan=\"1\"></td>");
                 c = c + 1;
             }
-            if (c == col) {
+            if (c == col && ti.size() > 0) {
                 print("</tr><tr>");
                 c = 0;
             }

@@ -1,0 +1,36 @@
+body {
+    font-size: 10pt;
+}
+
+table { 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#journalTitle {
+    font-size: 30px;
+    font-family: Georgia;
+    text-align: center;
+}
+
+#journalDate {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#title {
+    font-size: 20px;
+    text-align: center;
+    color: #8C0209;
+}
+
+#title a {
+	border: none;
+	text-decoration: none;
+	color: #8C0209;
+}
+
+#title a:hover {
+    text-decoration: underline;
+    color: #A0522D;
+}
