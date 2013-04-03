@@ -46,7 +46,8 @@ public class JornalDemo {
         }
 
         public void publish() {
-            print("<td width=\""+ (new Integer(1012/col)).toString() + "\" align=\"justify\" valign=\"top\" colspan=\"" + (new Integer(colf - coli + 1)).toString() + "\">");
+            print("<td width=\""+ (new Integer(1012/col)).toString() + "\" valign=\"top\" colspan=\"" + (new Integer(colf - coli + 1)).toString() + "\">");
+	    print("<div id=\"article\">");
             makeTitle();
             if (this.containsKey("image")) {
                 addImage();
@@ -64,6 +65,7 @@ public class JornalDemo {
                 addSource();
             }
 
+	    print("</div>");
             print("</td>");
         }
     };
@@ -168,6 +170,7 @@ public class JornalDemo {
             ti.add(n);
         }
         print("<body>");
+        print("<div id=\"content\">");
         printTitle();
         print("<table cellspacing=\"0\" cellpadding=\"8\" width=\"1024\" border=\"" +  border.toString() + "\"><tbody>");
         print("<tr>");
@@ -185,7 +188,7 @@ public class JornalDemo {
                 }
             }
             if (ok == false) {
-                print("<td width=\"337\" align=\"justify\" valign=\"top\" colspan=\"1\"></td>");
+                print("<td width=\"337\" valign=\"top\" colspan=\"1\"></td>");
                 c = c + 1;
             }
             if (c == col && ti.size() > 0) {
@@ -194,12 +197,13 @@ public class JornalDemo {
             }
         }
         while (c < col) {
-            print("<td width=\"337\" align=\"justify\" valign=\"top\" colspan=\"1\"></td>");
+            print("<td width=\"337\" valign=\"top\" colspan=\"1\"></td>");
             c += 1;
         }
 
         print("</tr>");
         print("</table></tbody>");
+	print("</div>");
         print("</body>");
     }
 
