@@ -38,11 +38,11 @@ public class JornalDemo {
         }
 
         public void addAuthor() {
-            print("<b>Autor:</b> " + this.get("author")); 
+            print("<b>Autor:</b> " + this.get("author") + "<br>"); 
         }
 
         public void addSource() {
-            print("<b>Fonte:</b> " + this.get("source")); 
+            print("<b>Fonte:</b> " + this.get("source") + "<br>"); 
         }
 
         public void publish() {
