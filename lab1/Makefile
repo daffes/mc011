@@ -17,5 +17,6 @@ run:
 clean:
 	cp antlr-generated/JornalDemo.java .;
 	rm antlr-generated/*
+	rm *.html
 	mv JornalDemo.java antlr-generated/
 

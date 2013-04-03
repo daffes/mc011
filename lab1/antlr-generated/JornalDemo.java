@@ -43,7 +43,7 @@ public class JornalDemo {
         }
 
         public void addSimilar() {
-            String newsName = this.get("similar");
+            String newsName = this.get("similar").toLowerCase();
             News n = news.get(newsName);
             String title = n.get("title");
             print("<b>Continue lendo sobre esse assunto em:</b> <a href=\"" + newsName + ".html\">" + title +  "</a><br><br>"); 
@@ -174,6 +174,7 @@ public class JornalDemo {
     public void printTitle() {
         print("<div id=\"journalTitle\">" + this.title + "</div>");
         print("<div id=\"journalDate\">" + this.date + "</div>");
+        print("<div id=\"separator\"></div>");
     }
 
     public void body(ArrayList<News> items) {
