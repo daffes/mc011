@@ -79,6 +79,7 @@ content {
 
 		author: "Fulano de Tal"
 		source: "Central de Informações da Virada Cultural"
+		similar: "headline2"
 	}	
 
 
@@ -91,6 +92,7 @@ content {
 O presidente nacional do PSDB, senador Sérgio Guerra (PSDB-PE), afirmou neste domingo que o partido mantém as discussões para a realização de uma consulta interna a fim de escolher o candidato do partido que disputará a Presidência em 2010.  Ele diz que os governadores Aécio Neves (PSDB) e José Serra (PSDB) --os presidenciáveis tucanos para 2010--ainda buscam um entendimento e que existe a possibilidade de os dois formarem uma \"chapa pura\". \"O que está certo é que os dois vão colaborar ao longo desse semestre e do próximo semestre. E, se não tiver acordo, em janeiro ou em fevereiro tem prévias. Mas ainda não há nenhuma composição desse tipo\", afirmou o senador. "
 	
 		source: "FolhaOnLine.com"
+		similar: "Noticia3"
 	}
 
 	Noticia3{
@@ -106,13 +108,14 @@ O presidente nacional do PSDB, senador Sérgio Guerra (PSDB-PE), afirmou neste d
 		O contrato inicial assinado com a Sony é de dois anos." 
 	
 		source: "http://www.folhaOnLine.com"
+		similar: "headline1"
 	}
 }
 
 structure {
 	format{
 		border: 0 //  número de colunas do jornal
-		col: 3 //Largura da borda entre colunas
+		col: 2 //Largura da borda entre colunas
 	}
 		
 	//define um item que ocupará espaço apenas da coluna 1.
