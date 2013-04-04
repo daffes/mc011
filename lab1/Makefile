@@ -1,22 +1,18 @@
-INPUT?=inputs/exemplo.npl
-OUTPUT?=inputs/exemplo.html
+INPUT?=misc/inputs/exemplo.npl
+OUTPUT?=html/output.html
 PATHW?=/usr/local/lib
+OUTPUT_PATH=$(dir $(OUTPUT))
 
-compile: antlr-generated/JornalLexer.java2
+compile: 
+	cd src; java -jar $(PATHW)/antlr-4.0-complete.jar Jornal.g 
+	javac -cp $(PATHW)/antlr-4.0-complete.jar src/Jornal*.java
 
-antlr-generated/JornalLexer.java2:
-	cd src; java -jar $(PATHW)/antlr-4.0-complete.jar Jornal*.g -o ../antlr-generated
-	javac -cp $(PATHW)/antlr-4.0-complete.jar antlr-generated/Jornal*.java
-
-#run: compile
-#cd antlr-generated; java org.antlr.v4.runtime.misc.TestRig Jornal r ../$(INPUT)
-
-run:
-	cd antlr-generated; java JornalDemo ../$(INPUT) > ../output.html
+run:	
+	+@[ -d $(dir $(OUTPUT)) ] || mkdir -p $(dir $(OUTPUT))
+	cp -r misc/basehtml/* $(dir $(OUTPUT))
+	java -cp "$(PATHW)/antlr-4.0-complete.jar:./src/" JornalDemo $(INPUT) $(OUTPUT)
 
 clean:
-	cp antlr-generated/JornalDemo.java .;
-	rm antlr-generated/*
-	rm *.html
-	mv JornalDemo.java antlr-generated/
+	ls src/* | grep -v Jornal.g | grep -v JornalDemo.java | xargs -I{} rm -v {}
+
 

@@ -77,7 +77,7 @@ content {
 		 Baleiro se apresentou ao meio-dia no palco principal com grande público e seguiu para uma participação especial no palco do Largo do Arouche."
         
 
-		author: "Fulano de Tal"
+		author: "fulano"
 		source: "Central de Informações da Virada Cultural"
 		similar: "headline2"
 	}	
@@ -106,7 +106,8 @@ O presidente nacional do PSDB, senador Sérgio Guerra (PSDB-PE), afirmou neste d
 		O último álbum da cantora, \"Xuxa só para Baixinhos 8\", vendeu 1 milhão de cópias desde seu lançamento, 
 		no ano passado. Ao todo, Xuxa vendeu 45 milhões de discos no período em que esteve na Som Livre. 
 		O contrato inicial assinado com a Sony é de dois anos." 
-	
+
+		date: "26 de Outubro de 2009"	
 		source: "http://www.folhaOnLine.com"
 		similar: "headline1"
 	}
@@ -115,7 +116,7 @@ O presidente nacional do PSDB, senador Sérgio Guerra (PSDB-PE), afirmou neste d
 structure {
 	format{
 		border: 0 //  número de colunas do jornal
-		col: 2 //Largura da borda entre colunas
+		col: 3 //Largura da borda entre colunas
 	}
 		
 	//define um item que ocupará espaço apenas da coluna 1.
@@ -141,5 +142,12 @@ structure {
 		headline1.abstract 
 	}
 }
+
+authors {
+        fulano {
+               name: "Fulano de Tal"
+               image: "davi.jpg"
+       }
+}      
 
 end

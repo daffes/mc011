@@ -1,9 +1,16 @@
+/*
+  @authors Davi Costa & Alexandre Kunieda 
+  https://github.com/daffes/mc011
+ */
+
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-import java.io.*;
-import java.util.*; 
 import java.lang.*;
+import java.io.*;
+import java.io.File;
+import java.util.*; 
 import java.util.regex.*;
+
 
 public class JornalDemo {
     public String title = null;
@@ -14,12 +21,14 @@ public class JornalDemo {
     public class Author {
         public String name;
         public String id;
-        public String image;
+        public String image = null;
         public ArrayList<News> myNews = new ArrayList<News>();
 
         void publish() {
             print("<b>Autor:</b> " + name + "<br>");
-            print("<div style=\"float: left; padding: 5px\"><img src=\"" + image + "\" width=\"50\" height=\"50\"> </div>");  
+            if (image != null) {
+                print("<div style=\"float: left; padding: 5px\"><img src=\"" + image + "\" width=\"50\" height=\"50\"> </div>");  
+            }
         }
     }
         
@@ -48,6 +57,12 @@ public class JornalDemo {
 
         public void addAuthor() {
             Author a = authors.get(this.get("author"));
+
+            // Backwards compatible
+            if (a == null) {
+                a = new Author();
+                a.name = this.get("author");
+            }
             a.publish();
         }
 
@@ -268,8 +283,8 @@ public class JornalDemo {
         return stringBuilder.toString();
     }
 
-    public void go(String fname) throws Exception {
-        String all = readFile(fname);
+    public void go(String fin, String fout) throws Exception {
+        String all = readFile(fin);
         CharStream in = new ANTLRInputStream(all);
         JornalLexer lexer = new JornalLexer(in);
         TokenStream tokens = new CommonTokenStream(lexer);
@@ -279,12 +294,18 @@ public class JornalDemo {
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(new JornalWalker(), tree);
 
+        if (fout != null) {
+            out = new BufferedWriter(new FileWriter(fout));
+        } else {
+            fout = "./dummy";
+        }
+
         validator();
         toHtml(items);
         out.close();
         col = 1;
         for (News n : news.values()) {
-            out = new BufferedWriter(new FileWriter("../" + n.name + ".html"));
+            out = new BufferedWriter(new FileWriter(new File(new File(fout).getAbsolutePath()).getParent() + '/' + n.name + ".html"));
             ArrayList<News> t = new ArrayList<News>();
             t.add(n);
             toHtml(t);
@@ -293,7 +314,12 @@ public class JornalDemo {
     }
 
     public static void main(String[] args) throws Exception {
+        System.err.println((new File(args[0])).getParent());
         JornalDemo j = new JornalDemo();
-        j.go(args[0]);
+        if (args.length < 2) {
+            j.go(args[0], null);
+        } else {
+            j.go(args[0], args[1]);
+        }
     }
 }
