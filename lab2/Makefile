@@ -1,3 +1,6 @@
+INPUT?=test/Teste.txt
+OUTPUT?=out.txt
+
 all: clean compile
 	@echo ""
 
