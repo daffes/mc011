@@ -1,3 +1,8 @@
+/*
+  @authors Davi Costa & Alexandre Kunieda 
+  https://github.com/daffes/mc011
+ */
+
 grammar Jornal;
 
 // Lexer
@@ -45,7 +50,7 @@ NEWSNAME: LETTER (LETTER | DIGIT | UNDERSCORE)*;
 
 //Parser
 
-r: BEGIN (content structure | structure content) authors? END EOF;
+r: BEGIN authors? (content authors? structure | structure authors? content) authors? END EOF;
 
 content: CONTENT LEFT_BRACKET news* newspaper news* RIGHT_BRACKET;
 

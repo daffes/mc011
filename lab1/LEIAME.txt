@@ -1,0 +1,28 @@
+Davi Costa              RA 073969
+Alexandre Kuniedara     RA 080523
+
+Todos os requirementos foram implementados a não ser as formatações da wikipedia devido a problemas que tivemos com regex e unicode.
+
+Diretório /misc possui arquivos auxiliares para a geração do html na pasta basehtml. Na pasta inputs temos alguns exemplos.
+Os arquivos auxiliares de html são copiados para o diretório destino do parâmetro OUTPUT.
+
+Implementações extras:
+1) Na descrição de uma notícia foi adicionado um campo chamado "similar" que permite passar o id de uma segunda notícia.
+Quando isso acontece, ao final de um notícia o usuário tem a opção de continuar navegando para uma notícia similar.
+
+2) Foi implementada uma estrutura authors. 
+authors {
+        author1 {
+           name: "name"
+           image: "image"
+        }
+        authorB...
+}
+Quando um ator é registrado dessa forma, uma página com todas as suas notícias também é disponível
+
+O campo authors da notícia agora recebe um desses ids, com isso, fica mais simples e organizado a informação de autor e permite uma imagem associada.
+
+Sugestão de teste:
+Testar o input ./misc/inputs/3col.npl -- Similar ao exemplo, mas com as duas alterações propostas e notícias suficientes para ocupar as 3 colunas. Clique em "Fulano de Tal" na última notícia.
+Testar o input ./misc/inputs/exemplo.npl -- O exemplo com as alterações, note que respeitamos o input para só usar as duas colunas esquerdas, o que não traz um resultado elegante como o 3col.
+Testar o input ./misc/input/bad.npl -- Similar ao exemplo, mas não contém o campo título em uma das notícias, observar a mensagem de erro relevante.
