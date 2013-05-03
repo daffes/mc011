@@ -25,7 +25,11 @@ public class JornalDemo {
         public ArrayList<News> myNews = new ArrayList<News>();
 
         void publish() {
-            print("<b>Autor:</b> " + name + "<br>");
+            if (id != null) {
+                print("<b>Autor:</b> " + "<a href=\"" + id + ".html\">" + name + "</a><br>");
+            } else {
+                print("<b>Autor:</b> " + name + "<br>");
+            }
             if (image != null) {
                 print("<div style=\"float: left; padding: 5px\"><img src=\"" + image + "\" width=\"50\" height=\"50\"> </div>");  
             }
@@ -56,7 +60,7 @@ public class JornalDemo {
         }
 
         public void addAuthor() {
-            Author a = authors.get(this.get("author"));
+            Author a = authors.get(this.get("author").toLowerCase());
 
             // Backwards compatible
             if (a == null) {
@@ -310,11 +314,26 @@ public class JornalDemo {
             t.add(n);
             toHtml(t);
             out.close();
+
+            if (n.get("author") != null) {
+                Author a = authors.get(n.get("author").toLowerCase());
+                if (a != null) {
+                    a.myNews.add(n);
+                }
+            }
         }
+        for (Author a : authors.values()) {
+            out = new BufferedWriter(new FileWriter(new File(new File(fout).getAbsolutePath()).getParent() + '/' + a.id + ".html"));
+            ArrayList<News> t = new ArrayList<News>();
+            for (News n : a.myNews) {
+                t.add(n);
+            }
+            toHtml(t);
+            out.close();
+       }
     }
 
     public static void main(String[] args) throws Exception {
-        System.err.println((new File(args[0])).getParent());
         JornalDemo j = new JornalDemo();
         if (args.length < 2) {
             j.go(args[0], null);
