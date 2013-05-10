@@ -5,10 +5,10 @@ all: clean compile
 	@echo ""
 
 clean:
-	rm -f src/x86/*.class
+	rm -f src/x86/*.class src/x86/*/*.class src/x86/*~ src/x86/*/*~
 
 compile:
-	javac -classpath lib/etapa2.jar src/x86/Codegen.java 
+	javac -classpath lib/etapa2.jar src/x86/Codegen.java src/x86/*/*.java
 
 run:
 	java -classpath src:lib/etapa2.jar main/Main $(INPUT) $(OUTPUT)

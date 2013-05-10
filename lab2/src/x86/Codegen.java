@@ -2,53 +2,60 @@ package x86;
 
 import util.List;
 
-import tree.Stm;
 import assem.Instr;
 
 import tree.*;
-import temp.Label;
+import temp.*;
 
-import errors.ErrorEchoer;
+import java.io.*;
 
-public class Codegen{
-    public Codegen(Frame f){
+import x86.stm.*;
+import x86.exp.*;
+
+public class Codegen {
+    Frame frame;
+    PrintIR p;
+
+    public Codegen(Frame f) {
+	this.frame = f;
+
 	System.out.print("Codegen(Frame f = ");
 	System.out.print(f.name);
 	System.out.println(")");
     }
 
-    public List<Instr> codegen(List<Stm> body){
+    public static void doit(Stm stm) {
+	if (stm instanceof CJUMP) MCJUMP.doit((CJUMP) stm);
+	else if (stm instanceof EXPSTM) MEXPSTM.doit((EXPSTM) stm);
+	else if (stm instanceof JUMP) MJUMP.doit((JUMP) stm);
+	else if (stm instanceof LABEL) MLABEL.doit((LABEL) stm);
+	else if (stm instanceof MOVE) MMOVE.doit((MOVE) stm);
+	else if (stm instanceof SEQ) MSEQ.doit((SEQ) stm);
+	else System.out.println("hu-ho");
+    }
+
+    public static Temp doit(Exp exp) {
+	if (exp instanceof BINOP) return MBINOP.doit((BINOP) exp);
+	else if (exp instanceof CALL) return MCALL.doit((CALL) exp);
+	else if (exp instanceof CONST) return MCONST.doit((CONST) exp);
+	else if (exp instanceof ESEQ) return MESEQ.doit((ESEQ) exp);
+	else if (exp instanceof MEM) return MMEM.doit((MEM) exp);
+	else if (exp instanceof NAME) return MNAME.doit((NAME) exp);
+	else if (exp instanceof TEMP) return MTEMP.doit((TEMP) exp);
+	else {
+	    System.out.println("hu-ho");
+	    return null;
+	}
+    }
+
+    public List<Instr> codegen(List<Stm> body) {
+	this.p = new PrintIR(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+
 	System.out.println("codegen got called");
 	// System.out.println(body.size());
 	for (Stm stm : body) {
-	    System.out.print("< ");
-	    System.out.print(stm);
-	    System.out.print(" > ");
-	    if (stm instanceof MOVE) {
-		System.out.print("This was a MOVE");
-		System.out.print(" (source=");
-		System.out.print(((MOVE) stm).getSource());
-		System.out.print(") (destination=");
-		System.out.print(((MOVE) stm).getDestination());
-		System.out.println(")");
-	    } else if (stm instanceof LABEL) {
-		System.out.print("This was a LABEL");
-		System.out.print(" (label=");
-		System.out.print(((LABEL) stm).getLabel());
-		System.out.println(")");
-	    } else if (stm instanceof JUMP) {
-		System.out.print("This was a JUMP");
-		System.out.print(" (exp=");
-		System.out.print(((JUMP) stm).getExpression());
-		System.out.print(") (targets=");
-		for (Label lbl : ((JUMP) stm).getTargets()) {
-		    System.out.print(" | ");
-		    System.out.print(lbl);
-		}
-		System.out.println(")");
-	    } else {
-		System.out.println();
-	    }
+	    doit(stm);
+	    this.p.printStatement(stm);
 	}
         return null;
     }
