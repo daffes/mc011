@@ -7,13 +7,13 @@ import assem.Instr;
 import tree.*;
 import temp.*;
 
+import x86.Codegen;
+
 public class MLABEL {
 
     public static void doit(LABEL stm) {
-	System.out.print("LABEL");
-	System.out.print(" (label=");
-	System.out.print(stm.getLabel());
-	System.out.println(")");
+	Instr i = new assem.LABEL(stm.getLabel() + ":", stm.getLabel());
+	Codegen.emit(i);
     }
 
 }

@@ -12,27 +12,20 @@ import x86.Codegen;
 public class MJUMP {
 
     public static void doit(JUMP stm) {
-	System.out.print("JUMP");
-	System.out.print(" (exp=");
-	System.out.print(stm.getExpression());
-	System.out.print(") (targets=");
-	System.out.print(stm.getTargets());
-	System.out.println(")");
-
-	Instr ins;
+	Instr i;
 
 	if (stm.getExpression() instanceof NAME) {
 	    Label l = ((NAME) stm.getExpression()).getLabel();
-	    ins = new assem.OPER("jmp `j0", new List<Label>(l, null));
+	    i = new assem.OPER("jmp `j0", new List<Label>(l));
 	} else {
 	    Temp rj = Codegen.doit(stm.getExpression());
-	    ins = new assem.OPER("jmp `s0",
+	    i = new assem.OPER("jmp `s0",
 				 null,
-				 new List<Temp>(rj, null),
+				 new List<Temp>(rj),
 				 stm.getTargets());
 	}
 
-	System.out.println(ins);
+	Codegen.emit(i);
     }
 
 }

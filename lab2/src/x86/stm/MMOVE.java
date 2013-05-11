@@ -11,15 +11,19 @@ import x86.Codegen;
 
 public class MMOVE {
 
-    public static void doit(MOVE stm) {
-	System.out.print("MOVE");
-	System.out.print(" (source=");
-	System.out.print(stm.getSource());
-	System.out.print(") (destination=");
-	System.out.print(stm.getDestination());
-	System.out.println(")");
+    private static Boolean matchMem(Exp exp) {
+	return (exp instanceof BINOP &&
+		(((BINOP) exp).getOperation() == BINOP.PLUS ||
+		 ((BINOP) exp).getOperation() == BINOP.MINUS) && 
+		((BINOP) exp).getRight() instanceof CONST);
+    }
 
-	Instr ins;
+    public static void doit(MOVE stm) {
+	Instr i;
+	String si = "mov";
+	List<Temp> dst = new List<Temp>();
+	List<Temp> src = new List<Temp>();
+	int dst_sz = 0, src_sz = 0;
 
 	/*  [rj+c] <- ri        [rj] <- ri
 	 *
@@ -31,38 +35,75 @@ public class MMOVE {
 	 *    / \       / \
 	 *      CONST     CONST
 	 */
-	if (stm.getSource() instanceof MEM) {
-	    Exp srcExp = ((MEM) stm.getSource()).getExpression();
+	if (stm.getDestination() instanceof MEM) {
+	    Exp srcExp = ((MEM) stm.getDestination()).getExpression();
 
-	    if (srcExp instanceof BINOP &&
-		((BINOP) srcExp).getOperation() == BINOP.PLUS && 
-		((BINOP) srcExp).getRight() instanceof CONST) {
+	    if (matchMem(srcExp)) {
 		Temp rj = Codegen.doit(((BINOP) srcExp).getLeft());
 		CONST c = (CONST) ((BINOP) srcExp).getRight();
 
-		// falta tratar o ri
-		Temp ri = Codegen.doit(stm.getDestination());
-
-		ins = new assem.OPER("mov [`s0 + " + c.getValue() + "], `s1", null, new List<Temp>(rj, new List<Temp>(ri, null)));
+		if (((BINOP) srcExp).getOperation() == BINOP.PLUS)
+		    si = si + " [`s" + src_sz + " + " + c.getValue() + "]";
+		else
+		    si = si + " [`s" + src_sz + " - " + c.getValue() + "]";
+		src.append(rj);
+		src_sz++;
 	    } else {
 		Temp rj = Codegen.doit(srcExp);
 
-		// falta tratar o ri
-		Temp ri = Codegen.doit(stm.getDestination());
-
-		ins = new assem.OPER("mov [`s0], `s1", null, new List<Temp>(rj, new List<Temp>(ri, null)));
+		si = si + " [`s" + src_sz + "]";
+		src.append(rj);
+		src_sz++;
 	    }
 	} else {
-	    Temp rj = Codegen.doit(stm.getSource());
+	    Temp rj = Codegen.doit(stm.getDestination());
 
-	    // falta tratar o ri
-	    Temp ri = Codegen.doit(stm.getDestination());
-
-	    ins = new assem.MOVE(rj, ri);
+	    si = si + " `d" + dst_sz;
+	    dst.append(rj);
+	    dst_sz++;
 	}
 
-	// System.out.println(ins.debug());
-	System.out.println(ins);
+	/*  rj <- [ri+c]        rj <- [ri]
+	 *
+	 *      MOVE      MOVE      MOVE
+	 *      /  \      /  \      /  \
+	 *         MEM       MEM       MEM
+	 *          |         |         |
+	 *          +         -
+	 *         / \       / \
+	 *           CONST     CONST
+	 */
+	if (stm.getSource() instanceof MEM) {
+	    Exp srcExp = ((MEM) stm.getSource()).getExpression();
+
+	    if (matchMem(srcExp)) {
+		Temp ri = Codegen.doit(((BINOP) srcExp).getLeft());
+		CONST c = (CONST) ((BINOP) srcExp).getRight();
+
+		if (((BINOP) srcExp).getOperation() == BINOP.PLUS)
+		    si = si + ", [`s" + src_sz + " + " + c.getValue() + "]";
+		else
+		    si = si + ", [`s" + src_sz + " - " + c.getValue() + "]";
+		src.append(ri);
+		src_sz++;
+	    } else {
+		Temp ri = Codegen.doit(srcExp);
+
+		si = si + ", [`s" + src_sz + "]";
+		src.append(ri);
+		src_sz++;
+	    }
+	} else {
+	    Temp ri = Codegen.doit(stm.getSource());
+
+	    si = si + ", `s" + src_sz;
+	    src.append(ri);
+	    src_sz++;
+	}
+
+	// System.out.println(si);
+	i = new assem.OPER(si, dst, src);
+	Codegen.emit(i);
     }
 
 }

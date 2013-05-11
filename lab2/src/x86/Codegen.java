@@ -16,6 +16,13 @@ public class Codegen {
     Frame frame;
     PrintIR p;
 
+    private static List<Instr> ilist = null;
+
+    public static void emit(assem.Instr i) {
+	if (ilist == null) ilist = new List<Instr>(i);
+	else ilist.append(i);
+    }
+
     public Codegen(Frame f) {
 	this.frame = f;
 
@@ -52,11 +59,10 @@ public class Codegen {
 	this.p = new PrintIR(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 
 	System.out.println("codegen got called");
-	// System.out.println(body.size());
 	for (Stm stm : body) {
 	    doit(stm);
 	    this.p.printStatement(stm);
 	}
-        return null;
+        return ilist;
     }
 }
