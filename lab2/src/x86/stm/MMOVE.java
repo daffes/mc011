@@ -63,11 +63,11 @@ public class MMOVE {
 	    dst_sz++;
 	}
 
-	/*  rj <- [ri+c]        rj <- [ri]
+	/*  rj <- [ri+c]         rj <- [ri]  rj <- c
 	 *
-	 *      MOVE      MOVE      MOVE
-	 *      /  \      /  \      /  \
-	 *         MEM       MEM       MEM
+	 *      MOVE      MOVE      MOVE      MOVE
+	 *      /  \      /  \      /  \      /  \
+	 *         MEM       MEM       MEM       CONST
 	 *          |         |         |
 	 *          +         -
 	 *         / \       / \
@@ -93,6 +93,10 @@ public class MMOVE {
 		src.append(ri);
 		src_sz++;
 	    }
+	} if (stm.getSource() instanceof CONST) {
+	    CONST c = (CONST) stm.getSource();
+
+	    si = si + ", " + c.getValue();
 	} else {
 	    Temp ri = Codegen.doit(stm.getSource());
 
