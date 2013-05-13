@@ -13,10 +13,9 @@ import x86.stm.*;
 import x86.exp.*;
 
 public class Codegen {
-    Frame frame;
+    public static Frame frame;
+    private static List<Instr> ilist;
     PrintIR p;
-
-    private static List<Instr> ilist = null;
 
     public static void emit(assem.Instr i) {
 	if (ilist == null) ilist = new List<Instr>(i);
@@ -24,7 +23,8 @@ public class Codegen {
     }
 
     public Codegen(Frame f) {
-	this.frame = f;
+	Codegen.frame = f;
+	Codegen.ilist = null;
 
 	System.out.print("Codegen(Frame f = ");
 	System.out.print(f.name);
@@ -60,9 +60,9 @@ public class Codegen {
 
 	System.out.println("codegen got called");
 	for (Stm stm : body) {
+	    // this.p.printStatement(stm);
 	    doit(stm);
-	    this.p.printStatement(stm);
 	}
-        return ilist;
+        return Codegen.ilist;
     }
 }

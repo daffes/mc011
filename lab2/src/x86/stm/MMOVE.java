@@ -93,7 +93,7 @@ public class MMOVE {
 		src.append(ri);
 		src_sz++;
 	    }
-	} if (stm.getSource() instanceof CONST) {
+	} else if (stm.getSource() instanceof CONST) {
 	    CONST c = (CONST) stm.getSource();
 
 	    si = si + ", " + c.getValue();
@@ -104,6 +104,9 @@ public class MMOVE {
 	    src.append(ri);
 	    src_sz++;
 	}
+
+	if (dst_sz == 0) dst = null;
+	if (src_sz == 0) src = null;
 
 	// System.out.println(si);
 	i = new assem.OPER(si, dst, src);
