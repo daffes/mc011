@@ -20,10 +20,22 @@ public class MCALL {
 
 	// push arguments into the stack (in reverse order)
 	for (int i=numArgs-1 ; i>=0 ; i--) {
-	    Temp t = Codegen.doit((Exp) args.get(i));
-	    iargcp = new assem.OPER("push `s0",
-				    new List<Temp>(Codegen.frame.esp),
-				    new List<Temp>(t, Codegen.frame.esp));
+	    Exp e = (Exp) args.get(i);
+	    if (e instanceof CONST) {
+		iargcp = new assem.OPER("push " + ((CONST) e).getValue(),
+					new List<Temp>(Codegen.frame.esp),
+					new List<Temp>(Codegen.frame.esp));
+	    } else if (e instanceof MEM) {
+		Temp t = Codegen.doit(((MEM) e).getExpression());
+		iargcp = new assem.OPER("push [`s0]",
+					new List<Temp>(Codegen.frame.esp),
+					new List<Temp>(t, Codegen.frame.esp));
+	    } else {
+		Temp t = Codegen.doit(e);
+		iargcp = new assem.OPER("push `s0",
+					new List<Temp>(Codegen.frame.esp),
+					new List<Temp>(t, Codegen.frame.esp));
+	    }
 	    Codegen.emit(iargcp);
 	}
 
@@ -31,7 +43,13 @@ public class MCALL {
 	    icall = new assem.OPER("call " + ((NAME) stm.getCallable()).getLabel(),
 				   Codegen.frame.calleeDefs(),
 				   null);
-        } else {
+        } else if(stm.getCallable() instanceof MEM) {
+	    MEM mcall = (MEM) stm.getCallable();
+	    Temp tlabel = Codegen.doit(mcall.getExpression());
+	    icall = new assem.OPER("call [`s0]",
+				   Codegen.frame.calleeDefs(),
+				   new List<Temp>(tlabel));
+	} else {
 	    Temp tlabel = Codegen.doit(stm.getCallable());
 	    icall = new assem.OPER("call `s0",
 				   Codegen.frame.calleeDefs(),

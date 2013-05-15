@@ -32,19 +32,24 @@ public class MBINOP {
 
 	if (op == "imul" || op == "idiv") {
 	    t = Codegen.frame.eax;
+	    icopy = new assem.OPER("mov `d0, `s0",
+				   new List<Temp>(t),
+				   new List<Temp>(left));
+	    Codegen.emit(icopy);
 	} else {
-	    t = new Temp();
+	    t = left;
 	}
-	icopy = new assem.OPER("mov `d0, `s0",
-			       new List<Temp>(t),
-			       new List<Temp>(left));
-        Codegen.emit(icopy);
 
         if (stm.getRight() instanceof CONST) {
             CONST c = (CONST) stm.getRight();
             i = new assem.OPER(op + " `d0, " + c.getValue(),
                                new List<Temp>(t),
                                new List<Temp>(t));
+	} else if (stm.getRight() instanceof MEM) {
+            Temp right = Codegen.doit(((MEM) stm.getRight()).getExpression());
+            i = new assem.OPER(op + " `d0, [`s1]",
+                               new List<Temp>(t),
+                               new List<Temp>(t, right));
         } else {
             Temp right = Codegen.doit(stm.getRight());
             i = new assem.OPER(op + " `d0, `s1",
@@ -53,13 +58,13 @@ public class MBINOP {
         }
         Codegen.emit(i);
 
-	if (op == "imul" || op == "idiv") {
-	    t = new Temp();
-	    icopy = new assem.OPER("mov `d0, `s0",
-				   new List<Temp>(t),
-				   new List<Temp>(Codegen.frame.eax));
-	    Codegen.emit(icopy);
-	}
+// 	if (op == "imul" || op == "idiv") {
+// 	    t = new Temp();
+// 	    icopy = new assem.OPER("mov `d0, `s0",
+// 				   new List<Temp>(t),
+// 				   new List<Temp>(Codegen.frame.eax));
+// 	    Codegen.emit(icopy);
+// 	}
 
         return t;
     }
