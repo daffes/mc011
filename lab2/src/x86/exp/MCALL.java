@@ -13,36 +13,44 @@ public class MCALL {
 
     public static Temp doit(CALL stm) {
 
-        int numArgs = 0;
+        List<Exp> args = stm.getArguments();
+        int numArgs = args.size();
 
-        if(stm.getArguments() != null)
-            numArgs = stm.getArguments().size();
+	Instr iargcp, icall, isp, irv;
 
-	// Ajustando ponteiro
-        Codegen.emit(new assem.OPER("sub esp, "+ numArgs * Codegen.frame.wordsize(), null, null));
-        List args = stm.getArguments();
+	// push arguments into the stack (in reverse order)
+	for (int i=numArgs-1 ; i>=0 ; i--) {
+	    Temp t = Codegen.doit((Exp) args.get(i));
+	    iargcp = new assem.OPER("push `s0",
+				    new List<Temp>(Codegen.frame.esp),
+				    new List<Temp>(t, Codegen.frame.esp));
+	    Codegen.emit(iargcp);
+	}
 
-	// Copiando argumentos
-	for (int i=0 ; i<numArgs ; i++)
-            Codegen.emit(new assem.OPER("mov [`s1+" + i * Codegen.frame.wordsize()+ "], `s0", null, new List<Temp>(Codegen.doit((Exp)args.get(i)), new List<Temp>(Codegen.frame.esp))));
-        
-        // Imprimindo CALL
-        if(stm.getCallable() instanceof NAME)
-            Codegen.emit(new assem.OPER("call " + ((NAME)stm.getCallable()).getLabel(), Codegen.frame.calleeDefs(), null));
+        if(stm.getCallable() instanceof NAME) {
+	    icall = new assem.OPER("call " + ((NAME) stm.getCallable()).getLabel(),
+				   Codegen.frame.calleeDefs(),
+				   null);
+        } else {
+	    Temp tlabel = Codegen.doit(stm.getCallable());
+	    icall = new assem.OPER("call `s0",
+				   Codegen.frame.calleeDefs(),
+				   new List<Temp>(tlabel));
+	}
+	Codegen.emit(icall);
 
-        else 
-            Codegen.emit(new assem.OPER("call `s0", Codegen.frame.calleeDefs(), new List<Temp>(Codegen.doit(stm.getCallable()))));
-        
-        // Recupera argumentos
-        Codegen.emit(new assem.OPER("add esp, " + numArgs * Codegen.frame.wordsize(), new List<Temp>(Codegen.frame.esp), new List<Temp>(Codegen.frame.esp)));
+	// update the stack pointer
+	isp = new assem.OPER("add `d0, " + numArgs * Codegen.frame.wordsize(),
+			     new List<Temp>(Codegen.frame.esp),
+			     new List<Temp>(Codegen.frame.esp));
+        Codegen.emit(isp);
 
-	Temp ret = new Temp();
-        Codegen.emit(new assem.MOVE(ret, Codegen.frame.RV()));
-        
-        return ret;
+	// fetch return value
+	Temp rv = new Temp();
+	irv = new assem.MOVE(rv, Codegen.frame.RV());
+        Codegen.emit(irv);
 
-        // return null;
-	// return new Temp();
+        return rv;
     }
 
 }

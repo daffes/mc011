@@ -25,10 +25,6 @@ public class Codegen {
     public Codegen(Frame f) {
 	Codegen.frame = f;
 	Codegen.ilist = null;
-
-	System.out.print("Codegen(Frame f = ");
-	System.out.print(f.name);
-	System.out.println(")");
     }
 
     public static void doit(Stm stm) {
@@ -58,9 +54,7 @@ public class Codegen {
     public List<Instr> codegen(List<Stm> body) {
 	this.p = new PrintIR(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 
-	System.out.println("codegen got called");
 	for (Stm stm : body) {
-	    // this.p.printStatement(stm);
 	    doit(stm);
 	}
         return Codegen.ilist;

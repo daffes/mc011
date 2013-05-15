@@ -24,7 +24,8 @@ public class MMOVE {
 	List<Temp> dst = new List<Temp>();
 	List<Temp> src = new List<Temp>();
 	int dst_sz = 0, src_sz = 0;
-
+	Temp rj, ri;
+	
 	/*  [rj+c] <- ri        [rj] <- ri
 	 *
 	 *      MOVE      MOVE      MOVE
@@ -39,7 +40,7 @@ public class MMOVE {
 	    Exp srcExp = ((MEM) stm.getDestination()).getExpression();
 
 	    if (matchMem(srcExp)) {
-		Temp rj = Codegen.doit(((BINOP) srcExp).getLeft());
+		rj = Codegen.doit(((BINOP) srcExp).getLeft());
 		CONST c = (CONST) ((BINOP) srcExp).getRight();
 
 		if (((BINOP) srcExp).getOperation() == BINOP.PLUS)
@@ -49,14 +50,14 @@ public class MMOVE {
 		src.append(rj);
 		src_sz++;
 	    } else {
-		Temp rj = Codegen.doit(srcExp);
+		rj = Codegen.doit(srcExp);
 
 		si = si + " [`s" + src_sz + "]";
 		src.append(rj);
 		src_sz++;
 	    }
 	} else {
-	    Temp rj = Codegen.doit(stm.getDestination());
+	    rj = Codegen.doit(stm.getDestination());
 
 	    si = si + " `d" + dst_sz;
 	    dst.append(rj);
@@ -73,11 +74,12 @@ public class MMOVE {
 	 *         / \       / \
 	 *           CONST     CONST
 	 */
-	if (stm.getSource() instanceof MEM) {
+	if (stm.getSource() instanceof MEM && 
+	    !(stm.getDestination() instanceof MEM)) {
 	    Exp srcExp = ((MEM) stm.getSource()).getExpression();
 
 	    if (matchMem(srcExp)) {
-		Temp ri = Codegen.doit(((BINOP) srcExp).getLeft());
+		ri = Codegen.doit(((BINOP) srcExp).getLeft());
 		CONST c = (CONST) ((BINOP) srcExp).getRight();
 
 		if (((BINOP) srcExp).getOperation() == BINOP.PLUS)
@@ -87,18 +89,19 @@ public class MMOVE {
 		src.append(ri);
 		src_sz++;
 	    } else {
-		Temp ri = Codegen.doit(srcExp);
+		ri = Codegen.doit(srcExp);
 
 		si = si + ", [`s" + src_sz + "]";
 		src.append(ri);
 		src_sz++;
 	    }
-	} else if (stm.getSource() instanceof CONST) {
+	} else if (stm.getSource() instanceof CONST && 
+		   !(stm.getDestination() instanceof MEM)) {
 	    CONST c = (CONST) stm.getSource();
 
 	    si = si + ", " + c.getValue();
 	} else {
-	    Temp ri = Codegen.doit(stm.getSource());
+	    ri = Codegen.doit(stm.getSource());
 
 	    si = si + ", `s" + src_sz;
 	    src.append(ri);
@@ -108,7 +111,6 @@ public class MMOVE {
 	if (dst_sz == 0) dst = null;
 	if (src_sz == 0) src = null;
 
-	// System.out.println(si);
 	i = new assem.OPER(si, dst, src);
 	Codegen.emit(i);
     }

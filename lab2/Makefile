@@ -14,5 +14,5 @@ run:
 	java -classpath src:lib/etapa2.jar main/Main $(INPUT) $(OUTPUT)
 
 compile_assembly:
-	nasm -felf32 $(INPUT) -o saida.o
-	gcc saida.o lib/runtime.o -o $(OUTPUT)
+	nasm -felf $(INPUT) -o saida.o
+	gcc -m32 saida.o lib/runtime.o -o $(OUTPUT)
