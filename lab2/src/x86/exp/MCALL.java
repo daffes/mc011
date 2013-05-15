@@ -25,11 +25,6 @@ public class MCALL {
 		iargcp = new assem.OPER("push " + ((CONST) e).getValue(),
 					new List<Temp>(Codegen.frame.esp),
 					new List<Temp>(Codegen.frame.esp));
-	    } else if (e instanceof MEM) {
-		Temp t = Codegen.doit(((MEM) e).getExpression());
-		iargcp = new assem.OPER("push [`s0]",
-					new List<Temp>(Codegen.frame.esp),
-					new List<Temp>(t, Codegen.frame.esp));
 	    } else {
 		Temp t = Codegen.doit(e);
 		iargcp = new assem.OPER("push `s0",
