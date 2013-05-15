@@ -21,7 +21,7 @@ public class MCJUMP {
 				    new List<Temp>(left, right));
 	Codegen.emit(icmp);
 
-	Instr i;
+	Instr i, ifalse, itrue;
 	String op = null;
 	switch (stm.getOperation()) {
 	case CJUMP.EQ:  op = "je";  break;
@@ -36,16 +36,21 @@ public class MCJUMP {
 	case CJUMP.UGE: op = "jae"; break;
 	}
 
-	Label laux = new Label();
+	Label ltrue = new Label();
 	i = new assem.OPER(op + " `j0",
-			   new List<Label>(laux,
+			   new List<Label>(ltrue,
 					   stm.getLabelTrue(),
 					   stm.getLabelFalse()));
 	Codegen.emit(i);
 
-	Codegen.emit(new assem.OPER("jmp `j0", new List<Label>(stm.getLabelFalse())));
-	Codegen.doit(new LABEL(laux));
-	Codegen.emit(new assem.OPER("jmp `j0", new List<Label>(stm.getLabelTrue())));
+	// conditional jump won't work for longer jumps
+	ifalse = new assem.OPER("jmp `j0", new List<Label>(stm.getLabelFalse()));
+	Codegen.emit(ifalse);
+
+	Codegen.doit(new LABEL(ltrue));
+
+	itrue = new assem.OPER("jmp `j0", new List<Label>(stm.getLabelTrue()));
+	Codegen.emit(itrue);
     }
 
 }
