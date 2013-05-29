@@ -11,7 +11,7 @@ clean:
 
 compile:
 #  Retire o comentario da linha abaixo se vc for usar o seu próprio Codegen
-#	javac -classpath src:lib/etapa3.jar src/x86/Codegen.java
+	javac -classpath src:lib/etapa3.jar src/x86/Codegen.java
 
 #	javac -classpath src:lib/etapa3.jar src/optimization/ReachingDefinitions.java
 	javac -classpath src:lib/etapa3.jar src/optimization/LivenessAnalysis.java
