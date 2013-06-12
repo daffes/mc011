@@ -7,7 +7,7 @@ all: clean compile run compile_assembly
 	@echo ""
 
 clean:
-	rm -f src/x86/*.class src/optimization/*.class src/main/*.class
+	rm -f src/x86/*.class src/optimization/*.class src/main/*.clas out.txt saida.o a.out
 
 compile:
 #  Retire o comentario da linha abaixo se vc for usar o seu próprio Codegen
