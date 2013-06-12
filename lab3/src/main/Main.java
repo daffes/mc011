@@ -133,7 +133,7 @@ public final class Main{
 		        instrs = p.frame.procEntryExit2(instrs);
 		        if(optimization){
 		        	DeadCodeElimination opt = new DeadCodeElimination();
-		        	opt.optimize(instrs);
+		        	instrs = opt.optimize(instrs);
 		        }
 		                                                
 		        // allocating the registers
