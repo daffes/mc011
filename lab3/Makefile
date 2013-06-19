@@ -7,7 +7,7 @@ all: clean compile run compile_assembly
 	@echo ""
 
 clean:
-	rm -f src/x86/*.class src/x86/*/*.class src/optimization/*.class src/main/*.class out.txt saida.o a.out
+	rm -f src/x86/*.class src/x86/*/*.class src/optimization/*.class src/main/*.class out.txt* saida.o* a.out*
 
 compile:
 	javac -classpath src:lib/etapa3.jar src/x86/*/*.java src/x86/Codegen.java
