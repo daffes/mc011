@@ -8,7 +8,7 @@ import util.List;
 /**
  * Superclasse das instru&ccedil;&otilde;es que ser&atilde;o geradas.
  */
-public abstract class Instr{
+public abstract class Instr {
     public String assem;
     public abstract List<Temp> use();
     public abstract List<Temp> def();
@@ -17,6 +17,7 @@ public abstract class Instr{
     public String format(TempMap m){
         List<Temp> dst = def();
         List<Temp> src = use();
+        
         Targets j = jumps();
         List<Label>jump = (j==null) ? null : j.labels;
         StringBuffer s = new StringBuffer();
@@ -54,7 +55,7 @@ public abstract class Instr{
                 }
             else
                 s.append(assem.charAt(i));
-
+        
         return s.toString();
     }
     

@@ -1,5 +1,13 @@
+
+
 class Factorial{
-    public static void main(String[] a){
-      if(true){}
+   public static void main(String[] a) {
+	System.out.println(new T().Start());
+    }
+}
+
+class T {
+    public int Start() {
+        return 2;
     }
 }

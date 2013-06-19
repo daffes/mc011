@@ -29,15 +29,14 @@ public class MBINOP {
             case BINOP.RSHIFT:  op = "shr";  break;
             case BINOP.ARSHIFT: op = "sar";  break;
         }
-
 	if (op == "imul" || op == "idiv") {
 	    t = Codegen.frame.eax;
 	} else {
 	    t = new Temp();
-	}
+	} 
 	icopy = new assem.OPER("mov `d0, `s0",
-			       new List<Temp>(t),
-			       new List<Temp>(left));
+	 		       new List<Temp>(t),
+	 		       new List<Temp>(left));
         Codegen.emit(icopy);
 
         if (stm.getRight() instanceof CONST) {

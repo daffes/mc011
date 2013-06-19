@@ -22,7 +22,7 @@ public class DeadCodeElimination {
 	    for (Instr lop : l) {
 		if (!kit.hasNext()) return false;
 		Instr kop = (Instr) kit.next();
-		if (!lop.debug().equals(kop.debug())) // kinda ugly -- replace?
+		if (!lop.debug().equals(kop.debug()))
 		    return false;
 	    }
 	    if (kit.hasNext()) return false;
@@ -43,6 +43,7 @@ public class DeadCodeElimination {
 		    k = new List<Instr>();
 
 		    cfg = new AssemFlowGraph(l);
+
 		    /* executa a analise de longevidade */
 		    dfa = new LivenessAnalysis(cfg);
 
@@ -66,11 +67,12 @@ public class DeadCodeElimination {
 				    for (Temp t : op.def())
 					opDef.add(t);
 				opDef.retainAll(dfa.out.get(n));
+                                
 				if (opDef.size() == 0) {
-				    OPER x = new OPER("; " + op.assem,
-						      op.def(),
-						      op.use());
-				    k.append(x);
+				    //OPER x = new OPER("; " + op.assem,
+					//	      op.def(),
+					//	      op.use());
+				    // k.append(x);
 				    // System.out.println("- " + op.debug());
 				    nopt++;
 				    continue;

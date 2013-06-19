@@ -135,10 +135,9 @@ public final class Main{
 		        	DeadCodeElimination opt = new DeadCodeElimination();
 		        	instrs = opt.optimize(instrs);
 		        }
-		                                                
 		        // allocating the registers
 		        RegAlloc r = new RegAlloc(p.frame, instrs);
-		        
+                        
 		        // outputting the generated code.
 		        Proc finalProc = p.frame.procEntryExit3(r.instrs);
 		        finalProc.print(output, r);
